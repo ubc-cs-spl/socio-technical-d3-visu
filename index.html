@@ -5,15 +5,18 @@
    <title>My project</title>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
    <link href="style.css" rel="stylesheet">
+   <link href="c3.css" rel="stylesheet">
  </head>
  <body>
-   Hello World
-   <div id="chart">
-   </div>
+ <div id="chart"></div>
    <script type="text/javascript" src="script.js"></script>
    <script>
-   var params = {}
-   vis.init(params);
-   </script>
+   	d3.tsv("data.tsv", function(data) {
+   		params = {}
+   		params.data = data;
+
+        vis.init(params);
+    });
+   </script> 
  </body>
 </html>
