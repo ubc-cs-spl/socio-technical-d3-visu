@@ -52,7 +52,7 @@ vis.init = function(params) {
           .attr("height", height);
 
   // tooltip
-  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return datePrinter(d.date); });
+  tip = d3.tip().attr('class', 'd3-tip').html(function(d) { return datePrinter(d.date);})
   tip.direction('n');
   tip.offset([-5, 0])
   svg.call(tip)
@@ -167,15 +167,18 @@ vis.init = function(params) {
         }
       })
       .on("mouseover", function(d) { 
-          tip.show(d);
           d3.select(this).style("stroke", "#F44336"); 
           d3.select(this).style("stroke-width", 2.5); 
         })
       .on("mouseout",  function(d) { 
-          tip.hide(d);
           d3.select(this).style("stroke", "black"); 
           d3.select(this).style("stroke-width", 1); 
-        });
+        })
+      .on("mouseover.tooltip", tip.show)
+      .on("mouseout.tooltip", tip.hide)
+      .on("dblclick", function(d){
+        window.open("http://www.github.com",'_blank');
+      });
       
       
 
