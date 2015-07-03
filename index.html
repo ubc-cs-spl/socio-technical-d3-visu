@@ -3,17 +3,24 @@
  <head>
    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
    <title>My project</title>
+   
+   <!-- Dependencies -->
+   <!-- d3 -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+   <!-- tooltip -->
+   <script src="bower_components/d3-tip/index.js"></script>
+   <!-- <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
+    -->
    <link href="style.css" rel="stylesheet">
  </head>
  <body>
- <div id="chart"></div>
+ <div id="chart" class="centered"></div>
    <script type="text/javascript" src="script.js"></script>
    <script>
    	d3.tsv("data.tsv", function(data) {
    		params = {}
    		params.data = data;
-      params.redline = 5340
+      params.redline = "2012-02-06"
       vis.init(params);
     });
    </script> 
