@@ -35,6 +35,13 @@ vis.init = function(params) {
    .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+   svg.append("rect")
+      .style("stroke", "black")
+      .style("fill", "#F5F5F5")
+      .style("stroke-width", 1)
+      .attr("width" , width)
+      .attr("height", height);
+
    // Holds defs like clippath
    var defs = svg.append("defs");
        	defs.append("clipPath")
@@ -52,8 +59,9 @@ vis.init = function(params) {
   x = d3.scale.linear()
     .range([0, width]).domain([0,xmax]);
 
+  // Offset by 3 pixels to preserve black border
   y = d3.scale.linear()
-    .range([height, 0]).domain([0,ymax]);
+    .range([height-3, 0]).domain([0,ymax]);
 
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -63,7 +71,9 @@ vis.init = function(params) {
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-    .tickSize(-width);
+    .ticks(6)
+    .tickSize(-width+1);
+    // .outerTickSize(0);
 
   svg.append("g")
     .attr("class", "x axis")
@@ -73,6 +83,11 @@ vis.init = function(params) {
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis);
+
+  // Style
+  d3.selectAll(".y line")
+  	.style("stroke-width",4)
+  	.style("stroke","white");
   // -------------------------
 
   // -------------------------
@@ -82,14 +97,52 @@ vis.init = function(params) {
   		.attr("id", "dataPointsGroup")
   		.attr("clip-path", "url(#mainclip)");
 
-  dataPoints.selectAll("circle")
-   	.data(params.data)
-   .enter()
-    .append("circle")
-    .attr("class", "circle")
-    .attr("cx", function (d) { return x(d.xcoord); })
-    .attr("cy", function (d) { return y(d.ycoord); })
-    .attr("r", function (d)  { return 5; });
+  var shapes = dataPoints.selectAll(".datapoints")
+   	.data(params.data).enter();
+   
+   shapes.append("path")
+   	.filter(function(d) { return d.type == 0 })
+   	  .attr("class", "shapes circle")
+      .attr("transform", function(d) { return "translate(" + x(d.xcoord) + "," + y(d.ycoord) + ")"; })
+      .attr("d", d3.svg.symbol().type("circle"))
+      .style("fill", "#00695C");
+
+   shapes.append("path")
+   	.filter(function(d) { return d.type == 1 })
+   	  .attr("class", "shapes square")
+      .attr("transform", function(d) { return "translate(" + x(d.xcoord) + "," + y(d.ycoord) + ")"; })
+      .attr("d", d3.svg.symbol().type("square"))
+      .style("fill", "#0277BD");
+
+   shapes.append("path")
+   	.filter(function(d) { return d.type == 2 })
+   	  .attr("class", "shapes triangle")
+      .attr("transform", function(d) { return "translate(" + x(d.xcoord) + "," + y(d.ycoord) + ")"; })
+      .attr("d", d3.svg.symbol().type("triangle-up"))
+      .style("fill", "#651FFF");
+  // -------------------------
+
+
+  // -------------------------
+  // Add red line
+  // -------------------------
+
+    var line = d3.svg.line()
+      .x(function(d) { return x(d.x);})
+      .y(function(d) { return d.y;})
+      .interpolate("linear");
+
+    var lineData = [[{"x": 5435,"y": 0},{"x": 5435,"y":height}]]
+    
+    dataPoints.selectAll(".line")
+      .data(lineData)
+    .enter().append("path")
+      .attr("class", "line")
+      .attr("d", line)
+      .attr("stroke", "#F44336")
+      .style("stroke-dasharray", ("3, 3")) 
+      .style("opacity", .75) 
+      .attr("stroke-width", 4);
   // -------------------------
   
 
@@ -97,7 +150,7 @@ vis.init = function(params) {
   // Add zoom
   // -------------------------
   var zoom = d3.behavior.zoom()
-      .x(x).y(y)
+      .x(x)
       .scaleExtent([1, 100])
       .on("zoom", zoomed);
 
@@ -121,9 +174,10 @@ vis.init = function(params) {
 	  // Update Axis
 	  svg.select(".x.axis").call(xAxis);
 	  // Update points
-	  dataPoints.selectAll("circle")
-	  	.attr("cx", function (d) { return x(d.xcoord); })
+	  dataPoints.selectAll(".shapes")
+       .attr("transform", function(d) { return "translate(" + x(d.xcoord) + "," + y(d.ycoord) + ")"; });    
 
+    dataPoints.selectAll('.line').attr("d", line)
 	}       
 }
 // -------------------------
