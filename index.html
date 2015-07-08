@@ -8,7 +8,9 @@
    <!-- d3 -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
    <!-- jQuery -->
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" ></script> 
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
    <!-- tooltip -->
    <script src="bower_components/d3-tip/index.js"></script>
@@ -17,44 +19,45 @@
  </head>
  <body>
  <div id="chart" class="centered"></div>
- <select name="jsonselector" id="jsonselector" style="display: none;" ></select>
+ <select name="jsonselector" id="jsonselector" ></select>
  <script type="text/javascript" src="script.js"></script>
  <script>
- 
- // Load list of files
- d3.json("files.json",function(files) {
-    $.each(files, function(key, value) {   
-       $('#jsonselector')
-           .append($("<option></option>")
-           .attr("value",key)
-           .text(value)); 
-      });
-    // Configure action to take when user 
-    // changes file from dropdown menu
-    $("#jsonselector").on("change",function(){  
-      var filename = $(this).val();
 
-      // Load the chosen file into d3
-      d3.json(filename, function(data) {
-
-        // Vis parameters
-        var params = {
+  // Vis parameters
+  var params = {
             width:1060,
             height:500,
             user_repo_color:"green",
-            dep_repo_color:"blue",
-            title:data.user_repo +", " + data.dep_repo
-         }
+            dep_repo_color:"blue"
+  }
+  // optional add title
+  // params["title"] = "title"
 
-        //Initialize the visualization 
-        vis.init(params,data);
+ // Load list of files
+ d3.json("files.json",function(files) {
 
-        // And show the select dropdown
-        $('#jsonselector').show();
+    $.each(files, function(key, value) {   
+       $('#jsonselector')
+           .append($("<option></option>")
+           .attr("value",value)
+           .text(key)); 
       });
-    })
-    // Initial call to selector to kick the whole thing off
-    $("#jsonselector").change();
+    
+     
+    $("#jsonselector").selectmenu({
+      width: 200,
+      change:function(event, data){ 
+
+        var filename = data["item"].value;
+
+        d3.json(filename, function(data) { // Load the chosen file into d3
+          vis.init(params,data);
+      });
+    }})
+
+    // Initial call to kick the whole thing off
+    var firstitem = Object.keys(files)[0];
+    d3.json(files[firstitem], function(data) { vis.init(params,data); })
 
   }) 	
    </script> 

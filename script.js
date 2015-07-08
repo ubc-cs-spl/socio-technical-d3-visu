@@ -94,7 +94,7 @@ vis.init = function(params,data) {
      //--------------------
      // To create the Y axis
      // Step 1: add an offset so the entries don't get cut off on the top
-     // Step 2: We make two bands for each element of dev_nb (one for each repo) by appending a 1 or 2
+     // Step 2: We make 8 bands for each element of dev_nb (2 repos*4types) by appending a 1 or 2 and an s,c,d,t (square, circle, diamond, triangle )
      // Step 3: We then need to hide the "1" or "2" appended to each username when displaying the title on the Y axix
      // Step 4: Finally we need to hide the lines within each username and keep the titles
      // --------------------
@@ -104,8 +104,14 @@ vis.init = function(params,data) {
     var bands = ["offset"]
     // Step 2 
     data.devs.forEach(function(d){
-      bands.push(d+"1");
-      bands.push(d+"2");
+      bands.push(d+"1s");
+      bands.push(d+"1c");
+      bands.push(d+"1d");
+      bands.push(d+"1t");
+      bands.push(d+"2s");
+      bands.push(d+"2c");
+      bands.push(d+"2d");
+      bands.push(d+"2t");
     })
     y = d3.scale.ordinal()
     .domain(bands).rangeBands([0,height]);
@@ -121,7 +127,7 @@ vis.init = function(params,data) {
       .tickSize(-width+1)
       .tickFormat(function (d) {
         // Step 3
-        return d.substring(0, d.length - 1);
+        return d.substring(0, d.length - 2);
       });
 
     svg.append("g")
@@ -139,18 +145,60 @@ vis.init = function(params,data) {
       .style("stroke","white")
       // Step 4.1 (Remove even lines)
       .each(function (d, i) {
-          if ((i % 2)) {  //even 
+          if ((i % 8) != 0) {  //Keep every 8 lines
               this.remove();
           }
       });
     d3.selectAll(".y text")
       // Step 4.2 (Remove odd titles)
       .each(function (d, i) {
-          if (!(i % 2)) {  //odd 
+          if ((i % 4) != 0 || (i % 8) == 0)  {  //odd 
               this.remove();
           }
+           
       });
   // ----end make axis-----
+
+
+
+  // -------------------------
+  // Tools
+  // -------------------------
+
+  // Tool to find the correct row for a given interaction datapoint
+  var row_finder = function(d){
+    var user = d.dev_id;
+
+    if (d.repo === data.user_repo) user +="1"
+    else user +="2"
+
+    if      (TYPES[d.type] ==="square")      user += "s";
+    else if (TYPES[d.type] ==="circle")      user += "c";
+    else if (TYPES[d.type] ==="diamond")     user += "d";
+    else if (TYPES[d.type] ==="triangle-up") user += "t";
+
+    return y(user);
+  }
+
+  
+  // Tool to find the correct URL for a given interaction datapoint
+  var url_finder = function(d){
+    if (d.type === "issue" || d.type === "pr"){
+      window.open("https://github.com/"+d.repo+"/issues/" +d.id,'_blank');
+    }
+    if (d.type === "commit"){
+      window.open("https://github.com/"+d.repo+"/commit/" +d.id,'_blank');
+    }
+    // Need to make ajax call to github api
+    if (d.type === "com"){
+      var url = "https://api.github.com/repos/"+d.repo+"/issues/comments/" + d.id
+      $.getJSON( url, function( data ) {
+        window.open(data.html_url,'_blank');
+      });
+    }
+  }
+  //------end tools-----------
+
 
 
   // -------------------------
@@ -159,14 +207,6 @@ vis.init = function(params,data) {
   var dataPoints = svg.append("g")
   		.attr("id", "dataPointsGroup")
   		.attr("clip-path", "url(#mainclip)");
-
-
-  // Tool to find the correct row for a given interaction datapoint
-  var row_finder = function(d){
-    var user = d.dev_id;
-    if (d.repo === data.user_repo) return y(user+"1");
-    else return y(user+"2");
-  }
 
   var shapes = dataPoints.selectAll(".datapoints")
    	.data(data.interactions).enter();
@@ -207,7 +247,7 @@ vis.init = function(params,data) {
         d3.select(this).style("opacity",.75)
       })
       .on("dblclick", function(d){
-        window.open("http://www.github.com",'_blank');
+        url_finder(d)
       });
 
   // -------------------------
@@ -240,8 +280,7 @@ vis.init = function(params,data) {
     }
 
   // ------end redline------
-  
-    
+      
 
   // -------------------------
   // Add zoom
@@ -271,6 +310,8 @@ vis.init = function(params,data) {
     dataPoints.selectAll('.line').attr("d", line)
 	}       
   // ------endzoom----------
+
+
 }
 // -------------------------
 })();
