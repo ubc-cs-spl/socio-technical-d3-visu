@@ -30,12 +30,13 @@
             user_repo_color:"green",
             dep_repo_color:"blue"
   }
-  // optional add title
-  // params["title"] = "title"
+  
+  // params["title"] = "title"    // optional add title
 
  // Load list of files
  d3.json("files.json",function(files) {
 
+    // Populate dropdown menu
     $.each(files, function(key, value) {   
        $('#jsonselector')
            .append($("<option></option>")
@@ -43,7 +44,7 @@
            .text(key)); 
       });
     
-     
+    // Configure action on change
     $("#jsonselector").selectmenu({
       width: 200,
       change:function(event, data){ 

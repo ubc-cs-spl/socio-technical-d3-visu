@@ -95,8 +95,8 @@ vis.init = function(params,data) {
      // To create the Y axis
      // Step 1: add an offset so the entries don't get cut off on the top
      // Step 2: We make 8 bands for each element of dev_nb (2 repos*4types) by appending a 1 or 2 and an s,c,d,t (square, circle, diamond, triangle )
-     // Step 3: We then need to hide the "1" or "2" appended to each username when displaying the title on the Y axix
-     // Step 4: Finally we need to hide the lines within each username and keep the titles
+     // Step 3: We then need to hide the "1c" or "2s" etc appended to each username when displaying the title on the Y axix
+     // Step 4: Finally we need to hide the lines within each username band and keep the titles
      // --------------------
 
     // Ordinal scale, hardcoded for now
@@ -126,6 +126,7 @@ vis.init = function(params,data) {
       .orient("left")
       .tickSize(-width+1)
       .tickFormat(function (d) {
+
         // Step 3
         return d.substring(0, d.length - 2);
       });
@@ -150,7 +151,7 @@ vis.init = function(params,data) {
           }
       });
     d3.selectAll(".y text")
-      // Step 4.2 (Remove odd titles)
+      // Step 4.2 (Remove titles everywhere except for 4th, 12th, 20th, etc)
       .each(function (d, i) {
           if ((i % 4) != 0 || (i % 8) == 0)  {  //odd 
               this.remove();
@@ -307,6 +308,7 @@ vis.init = function(params,data) {
 	  dataPoints.selectAll(".shapes")
        .attr("transform", function(d) { return "translate(" + x(d.date) + "," + d.ycoord + ")"; });
 
+    // Update line
     dataPoints.selectAll('.line').attr("d", line)
 	}       
   // ------endzoom----------
