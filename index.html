@@ -7,22 +7,56 @@
    <!-- Dependencies -->
    <!-- d3 -->
    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+   <!-- jQuery -->
+   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" ></script> 
+
    <!-- tooltip -->
    <script src="bower_components/d3-tip/index.js"></script>
-   <!-- <link rel="stylesheet" href="//rawgithub.com/Caged/d3-tip/master/examples/example-styles.css">
-    -->
+
    <link href="style.css" rel="stylesheet">
  </head>
  <body>
  <div id="chart" class="centered"></div>
-   <script type="text/javascript" src="script.js"></script>
-   <script>
-   	d3.tsv("data.tsv", function(data) {
-   		params = {}
-   		params.data = data;
-      params.redline = "2012-02-06"
-      vis.init(params);
-    });
+ <select name="jsonselector" id="jsonselector" style="display: none;" ></select>
+ <script type="text/javascript" src="script.js"></script>
+ <script>
+ 
+ // Load list of files
+ d3.json("files.json",function(files) {
+    $.each(files, function(key, value) {   
+       $('#jsonselector')
+           .append($("<option></option>")
+           .attr("value",key)
+           .text(value)); 
+      });
+    // Configure action to take when user 
+    // changes file from dropdown menu
+    $("#jsonselector").on("change",function(){  
+      var filename = $(this).val();
+
+      // Load the chosen file into d3
+      d3.json(filename, function(data) {
+
+        // Vis parameters
+        var params = {
+            width:1060,
+            height:500,
+            user_repo_color:"green",
+            dep_repo_color:"blue",
+            title:data.user_repo +", " + data.dep_repo
+         }
+
+        //Initialize the visualization 
+        vis.init(params,data);
+
+        // And show the select dropdown
+        $('#jsonselector').show();
+      });
+    })
+    // Initial call to selector to kick the whole thing off
+    $("#jsonselector").change();
+
+  }) 	
    </script> 
  </body>
 </html>
