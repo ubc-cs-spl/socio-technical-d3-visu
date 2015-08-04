@@ -1,0 +1,38 @@
+{
+  "user_repo": "jhpoelen/eol-globi-data",
+  "dep_repo": "neo4j/neo4j",
+  "dep_date": "2011-09-28 15:48:26 -0700",
+  "devs": [
+    "reiz"
+  ],
+  "interactions": [
+    {
+      "dev_id": "reiz",
+      "repo": "jhpoelen/eol-globi-data",
+      "type": "commit",
+      "id": "ae20af5c156ad5338b36c8403d08bd9b453f8ff0",
+      "date": "2013-09-04T06:50:51Z"
+    },
+    {
+      "dev_id": "reiz",
+      "repo": "jhpoelen/eol-globi-data",
+      "type": "commit",
+      "id": "15de8c0ddc17c662eccfcf765d369ad8e556bc19",
+      "date": "2013-08-28T11:04:09Z"
+    },
+    {
+      "dev_id": "reiz",
+      "repo": "jhpoelen/eol-globi-data",
+      "type": "com",
+      "id": 18117553,
+      "date": "2013-05-19T13:22:06Z"
+    },
+    {
+      "dev_id": "reiz",
+      "repo": "neo4j/neo4j",
+      "type": "pr",
+      "id": 1397,
+      "date": "2013-10-31T15:37:21Z"
+    }
+  ]
+}

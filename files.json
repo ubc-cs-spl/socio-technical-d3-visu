@@ -1,6 +1,5 @@
 {
-	"cloud software":"data/cloud-software-foundation-c5.json",
-	"data1":"data/data1.json",
-	"data2":"data/data2.json",
-	"data3":"data/data3.json"
+	"TbS_DS1_jhpoelen/eol-globi-data_neo4j/neo4j": "data/TbS_DS1/jhpoelen-eol-globi-data ----} neo4j-neo4j.json",
+	"SbT_DS1_backmeup/backmeup-prototype_fernandezpablo85/scribe-java": "data/SbT_DS1/backmeup-backmeup-prototype ----} fernandezpablo85-scribe-java.json",
+	"TbS_DS1_wisdom-framework/wisdom-orientdb_orientechnologies/orientdb": "data/TbS_DS1/wisdom-framework-wisdom-orientdb ----} orientechnologies-orientdb.json"
 }
