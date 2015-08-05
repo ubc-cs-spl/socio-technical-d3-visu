@@ -82,14 +82,15 @@ vis.init = function(params,data) {
 
     // ----Make date objects----
     data.interactions.forEach(function(d){ d.date = new Date(d.date);})
-
+    data.dep_date = new Date(data.dep_date);
+    
     // -------------------------
     // Set up scales + axis
     // -------------------------
-    var xmin = d3.min(data.interactions,function(d){return d.date});
-    var xmax = d3.max(data.interactions,function(d){return d.date});
+    var xmin = d3.min([d3.min(data.interactions,function(d){return d.date}),data.dep_date]);
+    var xmax = d3.max([d3.max(data.interactions,function(d){return d.date}),data.dep_date]);
 
-    x = d3.time.scale().domain([d3.time.day.offset(xmin, -2), d3.time.day.offset(xmax, 2)]).range([0, width]);
+    x = d3.time.scale().domain([d3.time.day.offset(xmin, -10), d3.time.day.offset(xmax, 10)]).range([0, width]);
      
      //--------------------
      // To create the Y axis
