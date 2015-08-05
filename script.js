@@ -290,8 +290,8 @@ vis.init = function(params,data) {
         .attr("stroke", params.dep_date_color || "red")
         .style("stroke-dasharray", ("3, 3")) 
         .style("opacity", .75) 
-        .attr("stroke-width", 4);
-
+        .attr("stroke-width", 4)
+        .on("click", function() { window.open("https://github.com/"+data.user_repo+"/commit/"+data.dep_commit_id,'_blank'); });
     }
 
   // ------end redline------
