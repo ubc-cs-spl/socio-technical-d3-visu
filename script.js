@@ -73,17 +73,30 @@ vis.init = function(params,data) {
 
     // Title
     svg.append("text")
-        .attr("x", (width / 2))             
+        .attr("x", (width / 2)-10)             
         .attr("y", 0 - (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "24px") 
-        .style("text-decoration", "underline")  
-        .text(params.title || data.user_repo +", " + data.dep_repo);
+        .attr("text-anchor", "end") 
+        .attr("fill", params.user_repo_color)
+        .style("font-size", "26px")
+        .style("font-weight", "bold")
+        .text("User: "+data.user_repo)
+        .on("click", function() { window.open("https://github.com/"+data.user_repo); });
+
+    svg.append("text")
+        .attr("x", (width / 2)+10)             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "start") 
+        .attr("fill", params.dep_repo_color)
+        .style("font-size", "26px")
+        .style("font-weight", "bold")
+        .text("Dep: "+data.dep_repo)
+        .on("click", function() { window.open("https://github.com/"+data.dep_repo); });
+
 
     // ----Make date objects----
     data.interactions.forEach(function(d){ d.date = new Date(d.date);})
     data.dep_date = new Date(data.dep_date);
-    
+
     // -------------------------
     // Set up scales + axis
     // -------------------------
