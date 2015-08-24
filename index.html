@@ -28,8 +28,6 @@
  <script type="text/javascript" src="script.js"></script>
  <script>
 
-
-
   // Vis parameters
   // user_height overrides height. Leave unset if you want vis height to be fixed regardless of number of users
   var params = {
@@ -39,9 +37,6 @@
             user_repo_color:"green",
             dep_repo_color:"blue"
   }
-
-  
-
 
   // Get size of current window
   params["width"] = $(window).width() * .95;
@@ -66,8 +61,6 @@
           vis.init(params,data);
         });
     });
-
-    console.log("sdas");
 
     // Initial call to kick the whole thing off
     var firstitem = Object.keys(files)[0];
