@@ -28,19 +28,26 @@
  <script type="text/javascript" src="script.js"></script>
  <script>
 
+
+
   // Vis parameters
+  // user_height overrides height. Leave unset if you want vis height to be fixed regardless of number of users
   var params = {
             width:1100,
-            height:500,
+            // height:500,
+            user_height:250, 
             user_repo_color:"green",
             dep_repo_color:"blue"
   }
+
   
-  // params["title"] = "title"    // optional add title
+
+
+  // Get size of current window
+  params["width"] = $(window).width() * .95;
 
  // Load list of files
  d3.json("files.json",function(files) {
-
     // Populate dropdown menu
     $.each(files, function(key, value) {   
        $('#jsonselector')
@@ -48,18 +55,7 @@
            .attr("value",value)
            .text(key)); 
       });
-    
-    // Configure action on change
-    // $("#jsonselector").selectmenu({
-    //   width: 200,
-    //   change:function(event, data){ 
-
-    //     var filename = data["item"].value;
-
-    //     d3.json(filename, function(data) { // Load the chosen file into d3
-    //       vis.init(params,data);
-    //   });
-    // }}) 
+   
     // Configure action on change
     $(".chosen").chosen({
       width:"300px",
@@ -71,20 +67,15 @@
         });
     });
 
-// $("#jsonselector").chosen({
-//       width: 200,
-//       change:function(event, data){ 
-
-//         var filename = data["item"].value;
-
-//         d3.json(filename, function(data) { // Load the chosen file into d3
-//           vis.init(params,data);
-//       });
-//     }})
+    console.log("sdas");
 
     // Initial call to kick the whole thing off
     var firstitem = Object.keys(files)[0];
-    d3.json(files[firstitem], function(data) { vis.init(params,data); })
+    d3.json(files[firstitem], function(data) { 
+      vis.init(params,data); 
+
+    })
+
 
   }) 	
    </script> 

@@ -32,6 +32,10 @@ vis.init = function(params,data) {
     width  = ( params.width  || 1060 ) - margin.left - margin.right;
     height = ( params.height || 500 ) - margin.top - margin.bottom;
 
+    if (params.user_height){
+        height = ( params.user_height * data["devs"].length) - margin.top - margin.bottom;      
+    }
+
     // Clear all 
     chart.selectAll("*").remove();
 
